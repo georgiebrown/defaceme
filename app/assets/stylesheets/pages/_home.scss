@@ -1,0 +1,31 @@
+body{
+  min-height: 100vh;
+  cursor: url('https://icons.iconarchive.com/icons/iconshow/general/32/Pen-icon.png'), auto;
+
+}
+
+nav{
+  position: fixed;
+  bottom:30px;
+  left: 30px;
+  z-index: 1;
+}
+
+nav a{
+  display: inline-block;;
+  width: 40px;
+  height: 40px;
+  border-radius: 20px;
+  margin: 0 10px 0 0;
+
+}
+
+  canvas{
+  background-image: url('https://res.cloudinary.com/daqhmzr2j/image/upload/v1595825577/mark_chu_portrait_photo_by_lydia_rui_xt5nyy.jpg');
+  background-repeat: no-repeat;
+  background-position: center;
+  width: 100%;
+  min-height: 100vh;
+  background-size: cover;
+}
+
