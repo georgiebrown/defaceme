@@ -69,6 +69,7 @@ $(function() {
     context.strokeStyle = "#FF0C93";
     context.lineWidth = 4;
   } else if (count == 11){
+    // eraser tool
       context.globalCompositeOperation="destination-out";
       // context.strokeStyle = "#583B0E";
       context.lineWidth = 6;
@@ -79,6 +80,7 @@ $(function() {
       context.lineWidth = 6;
     }
     else if (count == 25){
+      // eraser tool
       context.globalCompositeOperation="destination-out";
       // context.strokeStyle = "#583B0E";
       context.lineWidth = 10;
