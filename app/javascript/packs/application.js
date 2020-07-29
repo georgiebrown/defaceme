@@ -17,12 +17,14 @@ require("channels")
 
 import 'bootstrap';
 import { drawing } from "../components/drawing";
-import { createImage } from "../components/createImage";
+import { drawImage } from "../components/drawImage";
+import { fabric } from "fabric";
 
 drawing();
-createImage();
-changeColour();
-setInterval();
+drawImage();
+
+// changeColour();
+// setInterval();
 
 
 
