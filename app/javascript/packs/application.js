@@ -16,11 +16,11 @@ require("channels")
 // const imagePath = (name) => images(name, true)
 
 import 'bootstrap';
-import { drawing } from "../components/drawing";
+// import { drawing } from "../components/drawing";
 import { drawImage } from "../components/drawImage";
 import { fabric } from "fabric";
 
-drawing();
+// drawing();
 drawImage();
 
 // changeColour();

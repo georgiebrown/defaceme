@@ -1,0 +1,15 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  from_x: 1
+  from_y: 1
+  to_x: 1
+  to_y: 1
+  colour: MyString
+
+two:
+  from_x: 1
+  from_y: 1
+  to_x: 1
+  to_y: 1
+  colour: MyString
