@@ -1,6 +1,7 @@
 class DrawingChannel < ApplicationCable::Channel
   def subscribed
     # stream_from "some_channel"
+    stream_from "drawing_channel"
   end
 
   def unsubscribed
