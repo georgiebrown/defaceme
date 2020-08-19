@@ -114,20 +114,12 @@ $(function() {
    context.stroke();
   }
 
-  // changing colour with buttons
-  document.querySelectorAll("nav a").forEach(link => {
-    link.addEventListener("click", function(event) {
-      console.log(this)
-      event.preventDefault();
-      context.strokeStyle = this.style.backgroundColor;
-    })
-})
 
   // changing colour with clicks
 
   let count = 0;
 
-  document.addEventListener('click', (event) => {
+  document.addEventListener('click', 'touchstart', (event) => {
     // Could refactor with object i.e.{ 10 => [color, width. optype],... }
     count += 1;
     console.log(count);
