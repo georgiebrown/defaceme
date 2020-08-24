@@ -11,7 +11,6 @@ consumer.subscriptions.create("DrawingChannel", {
 
   received(data) {
     // Called when there's incoming data on the websocket for this channel
-    console.log(data);
     drawLine(data.fromx, data.fromy, data.tox, data.toy, data.strokeColour, data.lineWidth, data.opType);
   }
 });
@@ -33,6 +32,56 @@ $(function() {
   var opType = "source-over";
   context.lineCap = "round";
 
+  // Draw image
+  var img = new Image();   // Create new img element
+  img.addEventListener('load', function() {
+    context.drawImage(img, 0, 0, img.width,    img.height,     // source rectangle
+                   0, 0, canvas.width, canvas.height);
+  // Load Lines from DB
+  loadLines();
+  // execute drawImage statements here
+  }, false);
+  img.setAttribute('crossorigin', 'anonymous');
+  img.src = 'https://res.cloudinary.com/daqhmzr2j/image/upload/v1595396224/Screen_Shot_2020-07-22_at_3.36.06_pm_tzyswl.png'; // Set source path
+
+  // ensure canvassize is updated if window is resized
+  window.addEventListener('resize', reportWindowSize);
+
+  // Use MemCanvas to store drawings/photo before resize
+  var inMemCanvas = document.createElement('canvas');
+  var inMemCtx = inMemCanvas.getContext('2d');
+
+  function reportWindowSize() {
+    inMemCanvas.width = canvas.width;
+    inMemCanvas.height = canvas.height;
+    inMemCtx.drawImage(canvas, 0, 0, canvas.width, canvas.height, 0, 0, inMemCanvas.width, inMemCanvas.height);
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    context.drawImage(inMemCanvas, 0, 0, inMemCanvas.width, inMemCanvas.height, 0, 0, canvas.width, canvas.height);
+  }
+
+  function loadLines() {
+    const lineDataEle = document.querySelector("#line-data");
+    const parsedLines = JSON.parse(lineDataEle.dataset.lines);
+    parsedLines.forEach((line) => {
+      console.log([parseFloat(line.from_x),
+        parseFloat(line.from_y),
+        parseFloat(line.to_x),
+        parseFloat(line.to_y),
+        line.colour,
+        line.width,
+        line.op_type]);
+
+      drawLine(parseFloat(line.from_x),
+        parseFloat(line.from_y),
+        parseFloat(line.to_x),
+        parseFloat(line.to_y),
+        line.colour,
+        line.width,
+        line.op_type);
+    });
+  }
+
   var prev = {};
   let shouldPaint = false;
   var timeSinceLastSend = Date.now();
@@ -40,8 +89,8 @@ $(function() {
   // mouse down
   document.addEventListener("mousedown", (event) => {
     shouldPaint = true;
-    prev.x = event.pageX;;
-    prev.y = event.pageY;
+    prev.x = event.pageX / canvas.width.toFixed(4);
+    prev.y = event.pageY / canvas.height.toFixed(4);
   })
   // mouse up
   document.addEventListener("mouseup", (event) => {
@@ -52,17 +101,9 @@ $(function() {
     //if we are drawing, and its been over 10ms since last update
     if(shouldPaint && Date.now() - timeSinceLastSend > 20){
       //get mouse coords
-      var x = event.pageX;
-      var y = event.pageY;
+      var x = event.pageX / canvas.width.toFixed(4);
+      var y = event.pageY / canvas.height.toFixed(4);
 
-      var drawData = {
-          from_x: prev.x,
-          from_y: prev.y,
-          to_x: x,
-          to_y: y
-      }
-
-      console.log(drawData);
       //create ajax request to /updateline
       //data is prev coordinates and current coordinates and color
       $.ajax({
@@ -93,10 +134,8 @@ $(function() {
   //Touch Event Listeners
   document.addEventListener("touchstart", (event) => {
     shouldPaint = true;
-    var x = event.pageX;
-    var y = event.pageY;
-    prev.x = x;
-    prev.y = y;
+    prev.x = event.changedTouches[0].pageX / canvas.width.toFixed(4);
+    prev.y = event.changedTouches[0].pageY / canvas.height.toFixed(4);
   });
   // mobile touch up
   document.addEventListener("touchend", (event) => {
@@ -104,9 +143,36 @@ $(function() {
   });
   // mobile touch move
   document.addEventListener("touchmove", (event) => {
-    if (shouldPaint){
-    context.lineTo(event.pageX, event.pageY);
-    context.stroke();
+    //if we are drawing, and its been over 10ms since last update
+    if(shouldPaint && Date.now() - timeSinceLastSend > 20){
+      //get mouse coords
+      var x = event.changedTouches[0].pageX / canvas.width.toFixed(4);
+      var y = event.changedTouches[0].pageY / canvas.height.toFixed(4);
+
+      //create ajax request to /updateline
+      //data is prev coordinates and current coordinates and color
+      $.ajax({
+        method: 'POST',
+        url: '/updateline',
+        data: {
+          from_x: prev.x,
+          from_y: prev.y,
+          to_x: x,
+          to_y: y,
+          colour: strokeColour,
+          width: lineWidth,
+          op_type: opType
+        },
+        headers: { 'X-CSRF-Token': csrfToken }
+      });
+
+      // drawLine
+      drawLine(prev.x, prev.y, x, y, strokeColour, lineWidth, opType)
+
+      // Reset time since last send
+      timeSinceLastSend = Date.now();
+      prev.x = x;
+      prev.y = y;
     }
   });
 
@@ -203,19 +269,6 @@ $(function() {
   //   document.getElementById("canvasimg").style.backgroundImage = "url('https://res.cloudinary.com/daqhmzr2j/image/upload/v1595396224/Screen_Shot_2020-07-22_at_3.36.06_pm_tzyswl.png')";
   //   imageUrl.push(dataURL);
   // });
-
-
-  // Draw image
-
-  var img = new Image();   // Create new img element
-  img.addEventListener('load', function() {
-    context.drawImage(img, 0, 0, img.width,    img.height,     // source rectangle
-                   0, 0, canvas.width, canvas.height);
-  // execute drawImage statements here
-  }, false);
-  img.setAttribute('crossorigin', 'anonymous');
-  img.src = 'https://res.cloudinary.com/daqhmzr2j/image/upload/v1595396224/Screen_Shot_2020-07-22_at_3.36.06_pm_tzyswl.png'; // Set source path
-
 });
 
 //function to draw a line
@@ -230,7 +283,7 @@ function drawLine(fromx, fromy, tox, toy, strokeColour, lineWidth, opType){
   context.lineWidth = lineWidth;
   context.globalCompositeOperation = opType;
 
-  context.moveTo(fromx, fromy);
-  context.lineTo(tox, toy);
+  context.moveTo(fromx * canvas.width, fromy * canvas.height);
+  context.lineTo(tox * canvas.width, toy * canvas.height);
   context.stroke();
 }

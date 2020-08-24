@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_08_11_113945) do
+ActiveRecord::Schema.define(version: 2020_08_24_042211) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -37,10 +37,10 @@ ActiveRecord::Schema.define(version: 2020_08_11_113945) do
   end
 
   create_table "lines", force: :cascade do |t|
-    t.integer "from_x"
-    t.integer "from_y"
-    t.integer "to_x"
-    t.integer "to_y"
+    t.decimal "from_x", precision: 5, scale: 4
+    t.decimal "from_y", precision: 5, scale: 4
+    t.decimal "to_x", precision: 5, scale: 4
+    t.decimal "to_y", precision: 5, scale: 4
     t.string "colour"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
