@@ -15,13 +15,13 @@ require("channels")
 // const images = require.context('../images', true)
 // const imagePath = (name) => images(name, true)
 
-import 'bootstrap';
+// import 'bootstrap';
 // import { drawing } from "../components/drawing";
-import { drawImage } from "../components/drawImage";
-import { fabric } from "fabric";
+// import { drawImage } from "../components/drawImage";
+// import { fabric } from "fabric";
 
 // drawing();
-drawImage();
+// drawImage();
 
 // changeColour();
 // setInterval();

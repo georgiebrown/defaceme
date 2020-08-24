@@ -1,6 +1,10 @@
 class PagesController < ApplicationController
   skip_before_action :verify_authenticity_token
 
+  def home
+    @lines = Line.last(1000).to_json
+  end
+
   def create
     line = Line.new(line_params)
     if line.save
