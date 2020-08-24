@@ -26,11 +26,19 @@ $(function() {
   // Get context
   const context = canvas.getContext("2d");
 
+  //Set Initial 'pen' type
+  var strokeColour = "#FF0000";
+  var lineWidth = 2;
+  var opType = "source-over";
+  context.lineCap = "round";
+
   // Draw image
   var img = new Image();   // Create new img element
   img.addEventListener('load', function() {
     context.drawImage(img, 0, 0, img.width,    img.height,     // source rectangle
                    0, 0, canvas.width, canvas.height);
+  // Load Lines from DB
+  loadLines();
   // execute drawImage statements here
   }, false);
   img.setAttribute('crossorigin', 'anonymous');
@@ -51,15 +59,6 @@ $(function() {
     canvas.height = window.innerHeight;
     context.drawImage(inMemCanvas, 0, 0, inMemCanvas.width, inMemCanvas.height, 0, 0, canvas.width, canvas.height);
   }
-
-  //Set Initial 'pen' type
-  var strokeColour = "#FF0000";
-  var lineWidth = 2;
-  var opType = "source-over";
-  context.lineCap = "round";
-
-  // Load Linesz from DB
-  loadLines();
 
   function loadLines() {
     const lineDataEle = document.querySelector("#line-data");
