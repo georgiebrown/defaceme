@@ -27,50 +27,50 @@ $(function() {
   const context = canvas.getContext("2d");
 
   //Set Initial 'pen' type
-  var strokeColour = "#FF0000";
+  var strokeColour = "#ff370a";
   var lineWidth = 2;
   var opType = "source-over";
-  context.lineCap = "round";
+  context.lineCap = "square";
 
   // Draw image
   var img = new Image();   // Create new img element
   img.addEventListener('load', function() {
-    context.drawImage(img, 0, 0, img.width,    img.height,     // source rectangle
+  context.drawImage(img, 0, 0, img.width,    img.height,     // source rectangle
                    0, 0, canvas.width, canvas.height);
   // Load Lines from DB
-  loadLines();
+  // loadLines();
   // execute drawImage statements here
   }, false);
   img.setAttribute('crossorigin', 'anonymous');
-  img.src = 'https://res.cloudinary.com/daqhmzr2j/image/upload/v1595396224/Screen_Shot_2020-07-22_at_3.36.06_pm_tzyswl.png'; // Set source path
+  img.src = 'https://res.cloudinary.com/daqhmzr2j/image/upload/v1605510750/Defaceme%20Assets/Deface_Me_Image-min_mi9ox8.jpg'; // Set source path
 
   // ensure canvassize is updated if window is resized
-  window.addEventListener('resize', reportWindowSize);
+  // window.addEventListener('resize', reportWindowSize);
 
-  // Use MemCanvas to store drawings/photo before resize
-  var inMemCanvas = document.createElement('canvas');
-  var inMemCtx = inMemCanvas.getContext('2d');
+  // // Use MemCanvas to store drawings/photo before resize
+  // var inMemCanvas = document.createElement('canvas');
+  // var inMemCtx = inMemCanvas.getContext('2d');
 
-  function reportWindowSize() {
-    inMemCanvas.width = canvas.width;
-    inMemCanvas.height = canvas.height;
-    inMemCtx.drawImage(canvas, 0, 0, canvas.width, canvas.height, 0, 0, inMemCanvas.width, inMemCanvas.height);
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-    context.drawImage(inMemCanvas, 0, 0, inMemCanvas.width, inMemCanvas.height, 0, 0, canvas.width, canvas.height);
-  }
+  // function reportWindowSize() {
+  //   inMemCanvas.width = canvas.width;
+  //   inMemCanvas.height = canvas.height;
+  //   inMemCtx.drawImage(canvas, 0, 0, canvas.width, canvas.height, 0, 0, inMemCanvas.width, inMemCanvas.height);
+  //   canvas.width = window.innerWidth;
+  //   canvas.height = window.innerHeight;
+  //   context.drawImage(inMemCanvas, 0, 0, inMemCanvas.width, inMemCanvas.height, 0, 0, canvas.width, canvas.height);
+  // }
 
   function loadLines() {
     const lineDataEle = document.querySelector("#line-data");
     const parsedLines = JSON.parse(lineDataEle.dataset.lines);
     parsedLines.forEach((line) => {
-      console.log([parseFloat(line.from_x),
-        parseFloat(line.from_y),
-        parseFloat(line.to_x),
-        parseFloat(line.to_y),
-        line.colour,
-        line.width,
-        line.op_type]);
+      // console.log([parseFloat(line.from_x),
+      //   parseFloat(line.from_y),
+      //   parseFloat(line.to_x),
+      //   parseFloat(line.to_y),
+      //   line.colour,
+      //   line.width,
+      //   line.op_type]);
 
       drawLine(parseFloat(line.from_x),
         parseFloat(line.from_y),
@@ -190,32 +190,40 @@ $(function() {
   let count = 0;
 
   document.addEventListener('click', (event) => {
+    playRainforestMusic();
     // Could refactor with object i.e.{ 10 => [color, width. optype],... }
     count += 1;
     console.log(count);
      if (count == 10) {
-      strokeColour = "#FF0C93";
-      lineWidth = 4;
-      opType = "source-over";
-  } else if (count == 11){
-    // eraser tool
-      lineWidth = 6;
-      opType = "destination-out";
+      // strokeColour = "#FF0C93";
+      // lineWidth = 4;
+      // opType = "source-over";
+      playMusic();
+  // } else if (count == 11){
+  //   // eraser tool
+  //     lineWidth = 6;
+  //     opType = "destination-out";
+  //   }
+  //   else if (count == 20){
+  //     strokeColour = "#583B0E";
+  //     lineWidth = 6;
+  //     opType = "source-over";
+  //   }
+  //   else if (count == 25){
+  //     // eraser tool
+  //     lineWidth = 10;
+  //     opType = "destination-out";
+  //   }
+  //   else if (count == 30){
+  //     strokeColour = "#583B0E";
+  //     lineWidth = 10;
+  //     opType = "source-over";
+  //   }
     }
-    else if (count == 20){
-      strokeColour = "#583B0E";
-      lineWidth = 6;
-      opType = "source-over";
-    }
-    else if (count == 25){
-      // eraser tool
-      lineWidth = 10;
-      opType = "destination-out";
-    }
-    else if (count == 30){
-      strokeColour = "#583B0E";
-      lineWidth = 10;
-      opType = "source-over";
+    else if (count == 50){
+      context.clearRect(0, 0, canvas.width, canvas.height);
+      context.drawImage(img, 0, 0, img.width, img.height,     // source rectangle
+                   0, 0, canvas.width, canvas.height);
     }
   });
 
@@ -226,6 +234,8 @@ $(function() {
   //  // do stuff here
   // }, 30000);
 
+
+
   //CLOUDINARY upload every 1 minute
   var CLOUDINARY_URL = 'https://api.cloudinary.com/v1_1/daqhmzr2j/upload'
   var CLOUDINARY_UPLOAD_PRESET = 't6x6glso'
@@ -233,7 +243,6 @@ $(function() {
 
   setInterval(function(){
     var file = canvas.toDataURL();
-
     var formData = new FormData();
     formData.append('file', file);
     formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
@@ -287,3 +296,15 @@ function drawLine(fromx, fromy, tox, toy, strokeColour, lineWidth, opType){
   context.lineTo(tox * canvas.width, toy * canvas.height);
   context.stroke();
 }
+
+
+// Function play Music
+      function playRainforestMusic() {
+        var audio = document.getElementById("rainforest");
+        audio.play();
+      }
+
+          function playMusic() {
+        var audio = document.getElementById("music");
+        audio.play();
+      }

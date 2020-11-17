@@ -18,4 +18,15 @@
   </nav> -->
 
 </div>
+<audio loop id="rainforest">
+<source src="<%= asset_path('RainforestSounds.mp3') %>" type="audio/mpeg">
+
+Your browser does not support the audio tag.
+</audio>
+
+<audio id="music">
+<source src="<%= asset_path('Music.mp3') %>" type="audio/mpeg">
+
+Your browser does not support the audio tag.
+</audio>
 <div id="line-data" data-lines = <%= @lines %>></div>
