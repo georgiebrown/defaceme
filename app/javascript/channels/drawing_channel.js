@@ -20,6 +20,7 @@ $(function() {
   const canvas = document.querySelector("canvas");
 
   //Set  Canvas size to fill window
+
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
 
@@ -45,7 +46,7 @@ $(function() {
   img.src = 'https://res.cloudinary.com/daqhmzr2j/image/upload/v1605510750/Defaceme%20Assets/Deface_Me_Image-min_mi9ox8.jpg'; // Set source path
 
   // ensure canvassize is updated if window is resized
-  // window.addEventListener('resize', reportWindowSize);
+
 
   // // Use MemCanvas to store drawings/photo before resize
   // var inMemCanvas = document.createElement('canvas');
@@ -300,6 +301,7 @@ function drawLine(fromx, fromy, tox, toy, strokeColour, lineWidth, opType){
 
 // Function play Music
       function playRainforestMusic() {
+        console.log("playing");
         var audio = document.getElementById("rainforest");
         audio.play();
       }
@@ -307,4 +309,13 @@ function drawLine(fromx, fromy, tox, toy, strokeColour, lineWidth, opType){
           function playMusic() {
         var audio = document.getElementById("music");
         audio.play();
-      }
+  }
+
+  window.addEventListener('resize', resizeCanvas, false);
+  window.addEventListener('orientationchange', resizeCanvas, false);
+  resizeCanvas();
+
+  function resizeCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+  }
